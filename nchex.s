@@ -20,6 +20,7 @@ main:
 	syscall
 
 	init:
+	;INGENTING I 2 UKER LAKMWDOIWAJL
 	mov rax, 60
 	mov rdi, 0
 	syscall
