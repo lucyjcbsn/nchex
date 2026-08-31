@@ -10,8 +10,6 @@ section .text
 	global main
 
 main:
-	mov rbx, [rsi]
-	mov rcx, [rsi + 8]
 
 	cmp byte [debug_cfg], 1
 	jne init
@@ -23,15 +21,15 @@ main:
 	syscall
 	
 	init:
-	;INGENTING I 2 UKER LAKMWDOIWAJL
+	;DEBUG TIL 37
 
-	mov rcx, 1
-	
-	str_read:
+	xor rax, rax
+		
+	arg_str_read:
+	cmp byte ptr [rsi + rax], 0
 	inc rcx
-	jne rcx 
+	jne arg_str_read
 	
-
 	mov rax, 1
 	mov rdi, 1
 	mov rsi, rcx
