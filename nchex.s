@@ -3,8 +3,8 @@ section .data
 	debug_cfg: db 1
 
 	dbg_startmsg: db "test no init", 10, 0
-	;err1: db "Error, unable to open binary", 0
-	;search_err1: db "Address invalid", 0
+	err1: db "Error, unable to open binary", 10, 0
+	;search_err1: db "Address invalid", 10, 0
 
 section .text
 	global main
@@ -26,21 +26,37 @@ main:
 	
 read_init:
 	cmp rdi, 2
-        jl no_arg
+        jl exit
 
-        mov rsi, [rsi + 8]
-        xor rcx, rcx
+	mov rsi, [rsi + 8]
+	;sesame
+	mov rax, 2
+        mov rdi, rsi
+        xor rsi, rsi
+        xor rdx, rdx
+        syscall
 
-arg_read:
-	cmp byte [rsi + rax], 0
+	cmp rax, 0
+	jnl read
+
+	mov rdi, 1
+	mov rsi, err1
+	mov rdx, 30
+	jmp exit
+read:
+	mov r12, rax
+	cmp byte [rsi + rcx], 0
 	je bin_get
 	inc rcx
-	jne arg_read
+	jne read
 
 bin_get:
 	mov rax, 1
 	mov rdi, 1
 	mov rdx, rcx
+	syscall
+
+exit:
 	syscall
 
 	mov rax, 60
