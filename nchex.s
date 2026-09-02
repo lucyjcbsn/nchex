@@ -1,3 +1,6 @@
+section .bss
+	readbuffer: resb 4096
+
 section .data
 	;cfg
 	debug_cfg: db 1
@@ -10,7 +13,6 @@ section .text
 	global main
 
 main:
-
 	cmp byte [debug_cfg], 1
 	jne read_init
 	;test
@@ -39,24 +41,26 @@ read_init:
 	cmp rax, 0
 	jnl read
 
-	mov rdi, 1
-	mov rsi, err1
-	mov rdx, 30
 	jmp exit
+
 read:
 	mov r12, rax
-	cmp byte [rsi + rcx], 0
-	je bin_get
-	inc rcx
-	jne read
 
-bin_get:
-	mov rax, 1
-	mov rdi, 1
-	mov rdx, rcx
+	mov rax, 0
+	mov rdi, r12
+	mov rsi, readbuffer
+	mov rdx, 4096
 	syscall
 
+	cmp rax, 0
+	jle exit
+
+convert:
+
 exit:
+
+	mov rax, 3
+	mov rdi, r12
 	syscall
 
 	mov rax, 60
