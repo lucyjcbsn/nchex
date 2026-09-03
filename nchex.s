@@ -1,9 +1,14 @@
 section .bss
 	readbuffer: resb 4096
+	twbuffer: resb 12288
+
 
 section .data
 	;cfg
 	debug_cfg: db 1
+
+	;const strings
+	byte_conv: db "0123456789ABCDEF"
 
 	dbg_startmsg: db "test no init", 10, 0
 	err1: db "Error, unable to open binary", 10, 0
@@ -36,6 +41,7 @@ read_init:
 	mov rdi, rsi
 	xor rsi, rsi
 	xor rdx, rdx
+	
 	syscall
 
 	cmp rax, 0
@@ -56,6 +62,13 @@ read:
 	jle exit
 
 convert:
+
+	;char1
+	mov rax, rbx
+	shr rax, 4
+	mov al, byte [byte_conf + rax]
+
+	;char2
 
 exit:
 
