@@ -61,6 +61,10 @@ read:
 	cmp rax, 0
 	jle exit
 
+	mov r13, rax ; read
+	mov r14, 0 ;index
+	mov r15, 0 ;out
+
 convert:
 
 	;char1
@@ -69,7 +73,7 @@ convert:
 	mov al, byte [byte_conf + rax]
 
 	;char2
-
+	
 exit:
 
 	mov rax, 3
